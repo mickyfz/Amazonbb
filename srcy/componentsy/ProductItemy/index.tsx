@@ -43,7 +43,7 @@ const ProductItembb = ({ item }: ProductItemPropsbb) => {
             const starName = calculateStarNamebb(item.avgRating, i);
             return (
               <FontAwesome
-                key={`${item.id}-${i}`}
+                key={`${item.id}-${i}`}      // if you don't give then `Warning: Each child in a list should have a unique "key" prop.`
                 style={styles.star}
                 // name={i < Math.floor(item.avgRating) ? 'star' : 'star-o'}      // his code but it don't work properly 
                 name={starName}     // my code using chatgpt 💪🤣
