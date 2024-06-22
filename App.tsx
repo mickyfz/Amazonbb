@@ -4,6 +4,7 @@ import React from 'react';
 import HomeScreenbb from './srcy/screensy/HomeScreeny';
 import ProductScreenbb from './srcy/screensy/ProductScreeny';
 import ShopingCartScreenbb from './srcy/screensy/ShoopingCartScreeny';
+import AddressScreenbb from './srcy/screensy/AddressScreeny';
 
 
 const App = () => {
@@ -11,7 +12,9 @@ const App = () => {
     <View>
       {/* <HomeScreenbb/> */}
       {/* <ProductScreenbb/> */}
-      <ShopingCartScreenbb/>
+      {/* <ShopingCartScreenbb/> */}
+      <AddressScreenbb/>
+      {/* <MyComponent/> */}
     </View>
   )
 }
