@@ -5,17 +5,24 @@ import HomeScreenbb from './srcy/screensy/HomeScreeny';
 import ProductScreenbb from './srcy/screensy/ProductScreeny';
 import ShopingCartScreenbb from './srcy/screensy/ShoopingCartScreeny';
 import AddressScreenbb from './srcy/screensy/AddressScreeny';
+import Routerbb from './srcy/routery';
 
 
 const App = () => {
   return (
-    <View>
+    // <View>
+        //  You all see anything. baby. 
+    // <View style={{flex:1}}>
+          //  Now we are seeing everything. 
+    <>
+      {/* With view, we need to give flex:1. So that's why I am not using it after using React navigation.. own explore: */}
       {/* <HomeScreenbb/> */}
       {/* <ProductScreenbb/> */}
       {/* <ShopingCartScreenbb/> */}
-      <AddressScreenbb/>
+      {/* <AddressScreenbb/> */}
       {/* <MyComponent/> */}
-    </View>
+      <Routerbb/>
+    </>
   )
 }
 

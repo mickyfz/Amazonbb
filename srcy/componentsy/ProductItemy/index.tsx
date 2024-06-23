@@ -1,7 +1,17 @@
 import React from 'react';
-import {Image, View, Text} from 'react-native';
+import {Image, View, Text,Pressable} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styles from './stylesy';
+import {useNavigation} from '@react-navigation/native';
+
+
+/* import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamListbb } from '../../typesbb'; // adjust the path as necessary
+type ProductDetailsScreenNavigationPropbb = StackNavigationProp<
+  RootStackParamListbb,
+  'ProductDetailsNm'
+>;
+ */
 
 interface ProductItemPropsbb {
   item: {
@@ -30,14 +40,27 @@ const ProductItembb = ({ item }: ProductItemPropsbb) => {
     }
   };
   console.log('-----------------',item.avgRating);
+
+
+
+
+
+  const navigation = useNavigation();
+  // const navigation = useNavigation<ProductDetailsScreenNavigationPropbb>();
+
+  const onPressbb = () => {
+    // navigation.navigate('ProductDetailsNm', {id: item.id});
+            // it works just typescript is giving warning... just to solve this shit errorx i did all of this things             GO TO😝-->:codeStepReact QA-->24 
+    navigation.navigate('ProductDetailsNm' as never, { id: item.id } as never);
+  };
   return (
-    <View style={styles.root}>
+    <Pressable onPress={onPressbb} style={styles.root}>
       <Image style={styles.image} source={{uri: item.image}} />
       <View style={styles.rightContainer}>
         <Text style={styles.title} numberOfLines={3}>{item.title}</Text>
 
         {/* Ratings */}
-    
+        
         <View style={styles.ratingsContainer}>
           {[0, 0, 0, 0, 0].map((el, i) => {
             const starName = calculateStarNamebb(item.avgRating, i);
@@ -66,7 +89,7 @@ const ProductItembb = ({ item }: ProductItemPropsbb) => {
           )}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

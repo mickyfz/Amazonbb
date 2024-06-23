@@ -8,10 +8,15 @@ import Buttonbb from '../../componentsy/Buttony';
 import ImageCarouselbb from '../../componentsy/ImageCarousely';
 import QuantitySelectorbb from '../../componentsy/QuantitySelectory';
 
+import {useRoute} from '@react-navigation/native';
+
 const ProductScreenbb = () => {
   const [selectedOption, setSelectedOption] = useState(product.options ? product.options[0] : null);
   const [quantity, setQuantity] = useState(1);
-  
+
+const route = useRoute();
+console.log('--------xxx----',route.params);
+
   return (
     <ScrollView style={styles.root}>
       <Text style={styles.title}>{product.title}</Text>

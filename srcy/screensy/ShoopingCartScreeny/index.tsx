@@ -5,7 +5,9 @@ import CartProductItembb from '../../componentsy/CartProductItemCompy';
 import Button from '../../componentsy/Buttony';
 import products from '../../../assetsy/data/cart';
 
+import {useNavigation} from '@react-navigation/native';
 const ShopingCartScreenbb = () => {
+  const navigation = useNavigation();
 
   const totalPrice = products.reduce(     // to understand .reduce function GO TO😝-->:D:\Coding Playground\Extra code\Javascript Extra Code\3bb.reduce.md
     (summedPrice, product) =>
@@ -14,7 +16,10 @@ const ShopingCartScreenbb = () => {
   );
 
   const onCheckout = () => {
-    console.warn('checkout clicked');
+    // console.warn('checkout clicked');
+    navigation.navigate('AddressNm');
+          // NOTE: it's working just typescript giving errorx baby
+
   };
 
   return (
