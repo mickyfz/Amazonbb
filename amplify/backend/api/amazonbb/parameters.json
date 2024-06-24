@@ -1,0 +1,6 @@
+{
+  "AppSyncApiName": "amazonbb",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2024-06-24T15:28:01.318Z"
+}

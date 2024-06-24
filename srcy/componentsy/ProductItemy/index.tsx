@@ -83,9 +83,9 @@ const ProductItembb = ({ item }: ProductItemPropsbb) => {
 
 
         <Text style={styles.price}>
-          from ${item.price}
+          from ${item.price.toFixed(2)}
           {item.oldPrice && (
-            <Text style={styles.oldPrice}> ${item.oldPrice}</Text>
+            <Text style={styles.oldPrice}> ${item.oldPrice.toFixed(2)}</Text>
           )}
         </Text>
       </View>
