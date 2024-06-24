@@ -7,7 +7,11 @@ import ShopingCartScreenbb from './srcy/screensy/ShoopingCartScreeny';
 import AddressScreenbb from './srcy/screensy/AddressScreeny';
 import Routerbb from './srcy/routery';
 
+import { Amplify } from 'aws-amplify';
+import amplifyconfig from './src/amplifyconfiguration.json';
+Amplify.configure(amplifyconfig);
 
+import {  withAuthenticator,} from '@aws-amplify/ui-react-native';
 const App = () => {
   return (
     // <View>
@@ -26,4 +30,4 @@ const App = () => {
   )
 }
 
-export default App
+export default withAuthenticator(App);
