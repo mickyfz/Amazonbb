@@ -2,7 +2,6 @@ import React,{useState,useEffect} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 
 // import products from '../../../assetsy/data/products';
-import productsbb from '../../../assetsy/data/products';
 import ProductItembb from '../../componentsy/ProductItemy';
 
 // import {DataStore} from 'aws-amplify';    // his code errorx:
@@ -21,8 +20,12 @@ const HomeScreenbb = ({searchValueStcky}: {searchValueStcky?: string}) => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
+    // i setup it using     https://docs.amplify.aws/gen1/react-native/build-a-backend/more-features/datastore/set-up-datastore/
+    // GO TO😝-->:codeStepReact QA-->26 for what is `Datastore`
     DataStore.query(Product).then(setProducts);     // this is his code and it is the simpilest one 
     
+    
+    // learned from here https://docs.amplify.aws/gen1/react-native/build-a-backend/more-features/datastore/manipulate-data/#querying-for-all-items
     // DataStore.query(Product, (c) => c.avgRating.gt(4)).then(setProducts);     // you also can do like this ..own explore
 
     // you can also use it like function...it's good for understanding.... own explore:

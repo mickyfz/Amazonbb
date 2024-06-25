@@ -26,6 +26,8 @@ const App = () => {
       {/* <AddressScreenbb/> */}
       {/* <MyComponent/> */}
       <Routerbb/>
+
+       {/* NOTE: to understand `amplify\backend\api\amazonbb\schema.graphql`  GO TO😝-->: `d:\Coding Playground\AI Chats\1.Amplify_API_Schema_Relations.md` */}
     </>
   )
 }
