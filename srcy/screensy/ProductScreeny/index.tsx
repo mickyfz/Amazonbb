@@ -2,19 +2,22 @@ import React, {useEffect, useState} from 'react';
 import {View, Text,ScrollView,ActivityIndicator} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import styles from './stylesy';
-import product from '../../../assetsy/data/product';
+// import product from '../../../assetsy/data/product';
 
+import {CartProduct} from '../../../src/models';
 import Buttonbb from '../../componentsy/Buttony';
 import ImageCarouselbb from '../../componentsy/ImageCarousely';
 import QuantitySelectorbb from '../../componentsy/QuantitySelectory';
 
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {Product} from '../../../src/models/index.js';
 
 
 // import {DataStore} from 'aws-amplify';    // his code errorx:
 import {DataStore} from 'aws-amplify/datastore';
 
+// import { Auth } from 'aws-amplify';    // his code
+import { getCurrentUser } from 'aws-amplify/auth';
 const ProductScreenbb = () => {
   // const [selectedOption, setSelectedOption] = useState(product.options ? product.options[0] : null);
 
@@ -28,6 +31,8 @@ const ProductScreenbb = () => {
   const [quantity, setQuantity] = useState(1);
 
 const route = useRoute();
+const navigation = useNavigation();
+
 console.log('--------xxx----',route.params);
 
 
@@ -44,6 +49,29 @@ useEffect(() => {
     setSelectedOption(product.options[0]);
   }
 }, [product]);
+
+const onAddToCart = async () => {
+  // const userData = await Auth.currentAuthenticatedUser();    // his code..it's being depreciated baby
+
+  // learned from here baby `https://docs.amplify.aws/gen1/react-native/build-a-backend/auth/manage-user-session/#retrieve-your-current-authenticated-user` userid and 'sub' is same . i think
+  const {  userId,signInDetails } = await getCurrentUser();
+  console.log('userId---> ',userId);
+  // if (!product || !userData) {
+  if (!product || !userId) {
+    return;
+  }
+
+  const newCartProductbb = new CartProduct({
+    // userSub: userData.attributes.sub,
+    userSub: userId,
+    quantity,
+    option: selectedOption,
+    productID: product.id,
+  });
+
+  await DataStore.save(newCartProductbb);
+  navigation.navigate('shopCartBotTabNm');
+};
 
 // this is an GENIUS: solution 💪
 if (!product) {
@@ -94,9 +122,7 @@ if (!product) {
       {/* Button */}
       <Buttonbb
         text={'Add To Cart'}
-        onPress={() => {
-          console.warn('Add to cart');
-        }}
+        onPress={onAddToCart}
         containerStyles={{backgroundColor: '#e3c905'}}
       />
       <Buttonbb
