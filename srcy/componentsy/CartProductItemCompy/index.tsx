@@ -3,28 +3,34 @@ import {Image, View, Text} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import QuantitySelectorbb from '../QuantitySelectory';
 import styles from './stylesy';
+import {CartProduct} from '../../../src/models/index';
 
+// his code which works perfectly and easy
+/* 
 interface CartProductItemPropsbb {
-  cartItem: {
+  cartItem: CartProduct;
+} 
+*/
+
+// MY CODE i did it only for you just to boost your confidence
+import {Product} from '../../../src/models/index';
+interface CartProductItemPropsbb {
+  cartItem:{
     id: string;
     quantity: number;
-    option?: string;
-    item: {
-      id: string;
-      title: string;
-      image: string;
-      avgRating: number;
-      ratings: number;
-      price: number;
-      oldPrice?: number;
-    };
-  };
-}
+    option: string;
+    productybb:Product;
+  }
+} 
+
 // this component is copied from `D:\Coding Playground\not.just.dev code bb\Amazon\Amazonbb\srcy\componentsy\ProductItemy\index.tsx` and then modified 
 const CartProductItembb = ({cartItem}: CartProductItemPropsbb) => {
-  const {quantity: quantityProp, item} = cartItem;      // Alias: You're assigning the value of the `quantity` property to a new variable named `quantityProp`. This alias (`quantityProp`) serves as a temporary name within the component's scope, potentially making the code more descriptive in your specific context.
+  // const {quantity: quantityProp, item} = cartItem;      // Alias: You're assigning the value of the `quantity` property to a new variable named `quantityProp`. This alias (`quantityProp`) serves as a temporary name within the component's scope, potentially making the code more descriptive in your specific context.
+  // const {product, ...cartProduct} = cartItem;
+  const {productybb, ...cartProduct} = cartItem;
 
-  const [quantity, setQuantity] = useState(quantityProp);     
+  console.log('--xx> ',productybb);
+  const [quantity, setQuantity] = useState(cartItem.quantity);     
 
   const calculateStarNamebb = (rating:number, index:number) => {
     const floorRating = Math.floor(rating);
@@ -41,19 +47,19 @@ const CartProductItembb = ({cartItem}: CartProductItemPropsbb) => {
   return (
     <View style={styles.root}>
       <View style={styles.row}>
-        <Image style={styles.image} source={{uri: item.image}} />
+        <Image style={styles.image} source={{uri: productybb.image}} />
         <View style={styles.rightContainer}>
           <Text style={styles.title} numberOfLines={3}>
-            {item.title}
+            {productybb.title}
           </Text>
           {/* Ratings */}
          
           <View style={styles.ratingsContainer}>
           {[0, 0, 0, 0, 0].map((el, i) => {
-            const starName = calculateStarNamebb(item.avgRating, i);
+            const starName = calculateStarNamebb(productybb.avgRating, i);
             return (
               <FontAwesome
-                key={`${item.id}-${i}`}      // if you don't give then `Warning: Each child in a list should have a unique "key" prop.`
+                key={`${productybb.id}-${i}`}      // if you don't give then `Warning: Each child in a list should have a unique "key" prop.`
                 style={styles.star}
                 name={starName}     // my code using chatgpt 💪🤣
 
@@ -62,14 +68,14 @@ const CartProductItembb = ({cartItem}: CartProductItemPropsbb) => {
               />
             );
           })}
-          <Text>{item.ratings}</Text>
+          <Text>{productybb.ratings}</Text>
         </View>
 
 
           <Text style={styles.price}>
-            from ${item.price}
-            {item.oldPrice && (
-              <Text style={styles.oldPrice}> ${item.oldPrice}</Text>
+            from ${productybb.price.toFixed(2)}
+            {productybb.oldPrice && (
+              <Text style={styles.oldPrice}> ${productybb.oldPrice.toFixed(2)}</Text>
             )}
           </Text>
         </View>

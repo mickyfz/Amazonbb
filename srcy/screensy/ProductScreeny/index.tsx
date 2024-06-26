@@ -41,7 +41,7 @@ useEffect(() => {
     return;
   }
   DataStore.query(Product, route.params?.id).then(setProduct);
-  console.log(product);
+  console.log('product -->', product);
 }, [route.params?.id]);
 
 useEffect(() => {
