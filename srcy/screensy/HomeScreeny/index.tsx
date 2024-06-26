@@ -18,6 +18,12 @@ const HomeScreenbb = ({searchValueStcky}: {searchValueStcky?: string}) => {
   console.log(searchValueStcky);
 
   const [products, setProducts] = useState<Product[]>([]);
+          /* 
+          <Product[]> is a TypeScript type annotation. It specifies that the state will be an array of Product objects. This helps with type safety and provides better developer experience through auto-completion and type checking.
+
+          useState<Product[]>([]) initializes the state to an empty array of Product type objects.
+
+          */
 
   useEffect(() => {
     // i setup it using     https://docs.amplify.aws/gen1/react-native/build-a-backend/more-features/datastore/set-up-datastore/
