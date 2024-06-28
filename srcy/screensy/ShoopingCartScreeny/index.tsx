@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {View, StyleSheet, FlatList, Text, ActivityIndicator} from 'react-native';
 
 import CartProductItembb from '../../componentsy/CartProductItemCompy';
 import Button from '../../componentsy/Buttony';
 // import products from '../../../assetsy/data/cart';
 
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 // import { Auth } from 'aws-amplify';    // old
 import { getCurrentUser } from 'aws-amplify/auth';
@@ -21,8 +21,9 @@ const ShopingCartScreenbb = () => {
   const products=myCartProductsy;
 
 
-  // fetching my products which i `add to cart`  from 'CartProducts' table 
-  const fetchMyCartProductsbb = async () => {
+  // NOTE: fetching my products which i `add to cart`  from 'CartProducts' table 
+  const fetchMyCartProductsbb = async (whobb:string) => {
+    console.log('called BY ',whobb);      // i am using it to know who is calling this function bb
     // const userData = await Auth.currentAuthenticatedUser();     // old
     const {  userId } = await getCurrentUser();
     console.log('idxx',userId);
@@ -37,16 +38,24 @@ const ShopingCartScreenbb = () => {
       
       setMyCartProductsy(cartProducts);
       // console.log('22x ',cartProducts);
-      console.log('xx ',myCartProductsy);
+      // console.log('xx ',myCartProductsy);
     } catch (error) {
       console.error('Error fetching cart products:', error);
     }
 
   };
+  /* 
   useEffect(() => {
-    fetchMyCartProductsbb();
-  }, []);
-
+    fetchMyCartProductsbb('NORMAL');
+  }, []); 
+  */
+  
+  // GO TO😝-->:D:\Coding Playground\AI Chats\4.amazonbb usefocuseffect.md .. i am using it otherwise if we 'add to cart' and being redirect to 'shopping cart' page we won't see newly added product
+  useFocusEffect(
+    useCallback(() => {
+      fetchMyCartProductsbb('NORMAL');
+    }, [])
+  )
 
 
   useEffect(() => {
@@ -76,14 +85,14 @@ const ShopingCartScreenbb = () => {
       console.log(! [1,3]);        // false
        */
 
-      myCartProductsy.filter(cp =>{
+      /* myCartProductsy.filter(cp =>{
         console.log('xx -->',cp);
         console.log('xx1 -->',cp.productybb);
         console.log('xx2 -->',!cp.productybb);
        } 
-      )
-      console.log('blockedbb',myCartProductsy.filter(cp => !cp.product).length);
-      console.log(myCartProductsy);
+      ) */
+      // console.log('blockedbb',myCartProductsy.filter(cp => !cp.product).length);
+      // console.log(myCartProductsy);
       return;
     }
 
@@ -111,6 +120,54 @@ const ShopingCartScreenbb = () => {
     fetchProducts();
   }, [myCartProductsy]);
 
+
+  // SECTION:subscriptions baby
+  // He also did it, but I don't think it's necessary...the below is efficient because it only subscribe to the elements which This user being created...But this one being called when Any value in 'CartProduct' Updated, created or anything.
+  /* 
+  useEffect(() => {
+    
+    console.log('again subscribe ------------------xxxxxxxxxxxx');
+    const subscription = DataStore.observe(CartProduct).subscribe(msg =>
+      fetchMyCartProductsbb('SUBSCRIPTION'),
+    );
+    return subscription.unsubscribe;
+  }, []); 
+   */
+
+  // NOTE: Subscribe all of my cart products sothatt if i update quantity on another device get it Instantly. ... its weired and no need just using it subscription ..... If we update our quantity in the shopping cart page, first it will save on the database after that we will see the data using subscription... Here we are not using useState
+  useEffect(() => {
+
+      const subscriptions = myCartProductsy.map(cp =>
+        // GO TO😝-->:https://docs.amplify.aws/gen1/react-native/build-a-backend/more-features/datastore/real-time/#observe-model-mutations-in-real-time
+        DataStore.observe(CartProduct, cp.id).subscribe(msg => {
+          console.log('msg --> ',msg);
+          if (msg.opType === 'UPDATE') {
+            setMyCartProductsy(curCartProducts =>
+              curCartProducts.map(cp => {
+                if (cp.id !== msg.element.id) {
+                  console.log('differnt id--- ',cp.id,' --- ', msg.element.id);
+                  return cp;
+                }
+                console.log('cp--> ',cp);
+                console.log('msg--> ',msg);
+                return {
+                  ...cp,
+                  ...msg.element,     // we actually updating this 'cartproducts' table data and thus updating quantity value
+                };
+              }),
+            );
+          }
+        }),
+      );
+      return () => {
+        subscriptions.forEach(sub => sub.unsubscribe());
+      };
+    
+
+  
+  }, [myCartProductsy]);
+
+  
   const totalPrice = products.reduce(     // to understand .reduce function GO TO😝-->:D:\Coding Playground\Extra code\Javascript Extra Code\3bb.reduce.md
     (summedPrice, product) =>
       summedPrice + (product?.productybb?.price || 0)  * product.quantity,

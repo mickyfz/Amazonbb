@@ -5,6 +5,8 @@ import QuantitySelectorbb from '../QuantitySelectory';
 import styles from './stylesy';
 import {CartProduct} from '../../../src/models/index';
 
+// import {DataStore} from 'aws-amplify';    // old
+import {DataStore} from 'aws-amplify/datastore';
 // his code which works perfectly and easy
 /* 
 interface CartProductItemPropsbb {
@@ -24,7 +26,8 @@ interface CartProductItemPropsbb {
 } 
 
 // this component is copied from `D:\Coding Playground\not.just.dev code bb\Amazon\Amazonbb\srcy\componentsy\ProductItemy\index.tsx` and then modified 
-const CartProductItembb = ({cartItem}: CartProductItemPropsbb) => {
+const CartProductItembb = React.memo(({cartItem}: CartProductItemPropsbb) => {   // Please don't use memo, otherwise quantity is not updating.
+// const CartProductItembb = ({cartItem}: CartProductItemPropsbb) => {
   // const {quantity: quantityProp, item} = cartItem;      // Alias: You're assigning the value of the `quantity` property to a new variable named `quantityProp`. This alias (`quantityProp`) serves as a temporary name within the component's scope, potentially making the code more descriptive in your specific context.
   // const {product, ...cartProduct} = cartItem;
   const {productybb, ...cartProduct} = cartItem;
@@ -44,6 +47,30 @@ const CartProductItembb = ({cartItem}: CartProductItemPropsbb) => {
     }
   };
   
+  const updateQuantity = async (newQuantity: number) => {
+    console.log('update quantity bb');
+    const originalbb = await DataStore.query(CartProduct, cartProduct.id);
+
+    await DataStore.save(
+      CartProduct.copyOf(originalbb, updated => {
+        updated.quantity = newQuantity;
+
+        /* 
+        - This line uses `DataStore.save` to save an updated version of the `CartProduct` object.
+        - `CartProduct.copyOf` creates a copy of the `originalbb` object.
+
+              {   - `updated` in the callback function `updated => { updated.quantity = newQuantity; }` is this draft object.
+              - The draft object (`updated`) initially contains the same data as `originalbb`.
+              - Within the callback function, you can modify properties of the draft object (`updated`).
+              - In this case, `updated.quantity` is set to the new value provided by `newQuantity`.
+              }
+        - The function passed to `copyOf` receives a draft of the original object [`originalbb` as ] (`updated`), and updates its `quantity` property to the value of `newQuantity`.
+        - `DataStore.save` then saves this updated object back to the data store.
+        */
+       
+      }),
+    );
+  };
   return (
     <View style={styles.root}>
       <View style={styles.row}>
@@ -81,10 +108,11 @@ const CartProductItembb = ({cartItem}: CartProductItemPropsbb) => {
         </View>
       </View>
       <View style={styles.quantityContainer}>
-        <QuantitySelectorbb quantity={quantity} setQuantity={setQuantity} />
+        {/* <QuantitySelectorbb quantity={quantity} setQuantity={setQuantity} /> */}
+        <QuantitySelectorbb quantity={cartItem.quantity } setQuantity={updateQuantity} />
       </View>
     </View>
   );
-};
+});
 
 export default CartProductItembb;
